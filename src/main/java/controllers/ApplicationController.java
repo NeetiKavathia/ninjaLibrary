@@ -25,7 +25,7 @@ import entity.Book;
 
 import javax.persistence.EntityManager;
 import com.google.inject.*;
-
+import com.google.inject.persist.Transactional;
 @Singleton
 public class ApplicationController {
 	
@@ -57,10 +57,19 @@ public class ApplicationController {
         public String content;
         
     }
-
+    @Transactional
 	public Result viewBooks() {
 	    EntityManager entityManager = entitiyManagerProvider.get();
 		List<Book> l=entityManager.createQuery("from Book").getResultList();		
 		return Results.json().render(l);
+	}
+	@Transactional
+	public Result addBook(Book book){
+		EntityManager entityManager = entitiyManagerProvider.get();
+		List<Book> l=entityManager.createQuery("from Book where id="+ book.getId()).getResultList();
+		if(l.size()!=0)
+			return Results.badRequest();
+		entityManager.persist(book);
+		return Results.json().render("success");
 	}
 }
