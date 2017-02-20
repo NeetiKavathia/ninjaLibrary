@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html >
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script type="application/javascript" src="../../assets/js/Library.js"></script>
+
+<script type="application/javascript" src="../../assets/js/controller.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<body ng-app="mainApp">
+    <div ng-controller="libraryController" class="container">
+        <h2>Books in Library</h2>
+        <table class="table ">
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Author</th>
+            </tr>
+            <tr ng-repeat="book in Books" >
+                <div ng-hide="book.EditAllowed">
+                    <td ng-hide="book.EditAllowed">{{book.Name}}</td>
+                    <td ng-hide="book.EditAllowed">{{book.Price}}</td>
+                    <td ng-hide="book.EditAllowed">{{book.Author}}</td>
+                    <td ng-hide="book.EditAllowed"><input type="button" value="Modify" data-ng-click="ModifyBook(book)" /></td>    
+                    <td ng-hide="book.EditAllowed"><input type="button" value="Delete" data-ng-click="DeleteBook(book)" /></td>
+                </div>
+                <div ng-show="book.EditAllowed">
+                    <td ng-show="book.EditAllowed"><input ng-pattern="/^[a-zA-Z0-9]*$/" type="string" data-ng-model="modifiedbook.Name" /></td>          
+                    <td ng-show="book.EditAllowed"><input type="number" data-ng-model="modifiedbook.Price" /></td>         
+                    <td ng-show="book.EditAllowed"><input type="string" data-ng-model="modifiedbook.Author" /></td>         
+                    <td ng-show="book.EditAllowed"><input class="btn btn-primary" type="button" value="Save" data-ng-click="UpdateBook(modifiedbook)" /></td>
+                </div>    
+            </tr>
+            <tr>
+                <td><input type="string" ng-pattern="/^[a-zA-Z0-9]*$/" data-ng-model="newbook.Name" /></td>          
+                <td><input type="number" data-ng-model="newbook.Price" /></td>         
+                <td><input type="string" data-ng-model="newbook.Author" /></td>         
+                <td><input class="btn btn-primary" type="button" value="Add" data-ng-click="AddBook(newbook)" /></td>    
+            </tr>
+        </table>
+       
+    </div>
+</body>
+</html>
