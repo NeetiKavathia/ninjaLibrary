@@ -6,9 +6,37 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedNativeQueries;
+
+
 
 @Entity
 @Table(name = "books")
+@NamedNativeQueries({
+	@NamedNativeQuery(
+			name="Book.viewAllBooks",
+			query="select * from books",
+			resultClass=Book.class
+			),
+	@NamedNativeQuery(
+			name="Book.delBook",
+			query="delete from books where id= :id",
+			resultClass=Book.class
+			),
+	
+	@NamedNativeQuery(
+			name="Book.addBook",
+			query="insert into books(name,author,category,price) values(:name,:author,:category,:price )",
+			resultClass=Book.class
+			),
+	@NamedNativeQuery(
+			name="Book.updateBook",
+			query="update name=:name,author=:author,category=:category,price=:price",
+			resultClass=Book.class
+			)
+	
+})
 public class Book {
 	
 	@Id @GeneratedValue

@@ -26,10 +26,14 @@ import java.util.List;
 import entity.Book;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import com.google.inject.*;
 import com.google.inject.persist.Transactional;
+import com.google.inject.persist.*;
+import ninja.jpa.UnitOfWork;
 
+	
 @Singleton
 public class ApplicationController {
 	
@@ -61,36 +65,53 @@ public class ApplicationController {
         public String content;
         
     }
-    @Transactional
+    @UnitOfWork
 	public Result viewBooks() {
 	    EntityManager entityManager = entitiyManagerProvider.get();
-		List<Book> l=entityManager.createQuery("from Book").getResultList();		
-		return Results.json().render(l);
+		//List<Book> l=entityManager.createQuery("from Book").getResultList();	
+		Query l = entityManager.createNamedQuery("Book.viewAllBooks", Book.class);
+		return Results.json().render(l.getResultList());
 	}
 	@Transactional
 	public Result addBook(Book book){
 		EntityManager entityManager = entitiyManagerProvider.get();
-		List<Book> l=entityManager.createQuery("from Book where id="+ book.getId()).getResultList();
+	//	List<Book> l=entityManager.createQuery("from Book where id="+ book.getId()).getResultList();
+	Query l=entityManager.createNamedQuery("Book.addBook",Book.class);
+	l.setParameter("name",book.getName());
+	l.setParameter("author",book.getAuthor());
+	l.setParameter("category",book.getCategory());
+	l.setParameter("price",book.getPrice());
+
 //		if(l.size()!=0)
 //			return Results.badRequest();
-		entityManager.persist(book);
+		//entityManager.persist(book);
+		l.executeUpdate();
 		return Results.json().render("success");
 	}
 	@Transactional
 	public Result delBook(Book book){
 		EntityManager entityManager = entitiyManagerProvider.get();
-		Book bo=entityManager.find(Book.class,book.getId());
-		entityManager.remove(bo);
+//		Book bo=entityManager.find(Book.class,book.getId());
+//		entityManager.remove(bo);
+		Query l=entityManager.createNamedQuery("Book.delBook",Book.class);
+		l.setParameter("id",book.getId());
+		l.executeUpdate();
 		return Results.json().render("success");
 	}
 	@Transactional
 	public Result updateBook(Book book){
 		EntityManager entityManager = entitiyManagerProvider.get();
-		Book bo=entityManager.find(Book.class,book.getId());
-		bo.setName(book.getName());
-		bo.setAuthor(book.getAuthor());
-		bo.setCategory(book.getCategory());
-		bo.setPrice(book.getPrice());
+//		Book bo=entityManager.find(Book.class,book.getId());
+//		bo.setName(book.getName());
+//		bo.setAuthor(book.getAuthor());
+//		bo.setCategory(book.getCategory());
+//		bo.setPrice(book.getPrice());
+		Query l=entityManager.createNamedQuery("Book.updateBook",Book.class);
+		l.setParameter("name",book.getName());
+		l.setParameter("author",book.getAuthor());
+		l.setParameter("category",book.getCategory());
+		l.setParameter("price",book.getPrice());
+		l.executeUpdate();
 		return Results.json().render("success");
 	}
 	
