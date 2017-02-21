@@ -32,12 +32,12 @@
             
             <tr ng-repeat="book in Books" >
                 <div ng-hide="book.EditAllowed">
-                    <td >{{book.name}}</td>
+                    <td ng-hide="book.EditAllowed">{{book.name}}</td>
                     <td ng-hide="book.EditAllowed">{{book.author}}</td>
                     <td ng-hide="book.EditAllowed">{{book.category}}</td>
                     <td ng-hide="book.EditAllowed">{{book.price}}</td>
                     <td ng-hide="book.EditAllowed"><input type="button" value="Modify" data-ng-click="ModifyBook(book)" /></td>    
-                    <td ng-hide="book.EditAllowed"><input type="button" value="Delete" data-ng-click="DeleteBook(book)" /></td>
+                    <td ng-hide="book.EditAllowed"><input type="button" value="Delete" data-ng-click="DelBook(book)" /></td>
                 </div>
                 <div ng-show="book.EditAllowed">
                     <td ng-show="book.EditAllowed"><input ng-pattern="/^[a-zA-Z0-9]*$/" type="string" data-ng-model="modifiedbook.name" /></td>

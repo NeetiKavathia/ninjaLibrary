@@ -36,8 +36,11 @@ public class Routes implements ApplicationRoutes {
         router.GET().route("/main").with(ApplicationController::main);
         router.GET().route("/viewAllBooks").with(ApplicationController::viewBooks);
         router.POST().route("/addBook").with(ApplicationController::addBook);
-//        router.POST().route("/newBook").with(ApplicationController::newBook);
+        router.POST().route("/delBook").with(ApplicationController::delBook);
+        router.POST().route("/updateBook").with(ApplicationController::updateBook);
 
+        
+        
  
         ///////////////////////////////////////////////////////////////////////
         // Assets (pictures / javascript)

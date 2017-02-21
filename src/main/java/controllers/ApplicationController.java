@@ -18,14 +18,18 @@ package controllers;
 
 import ninja.Result;
 import ninja.Results;
+import ninja.params.*;
 
 import java.util.List;
+
 
 import entity.Book;
 
 import javax.persistence.EntityManager;
+
 import com.google.inject.*;
 import com.google.inject.persist.Transactional;
+
 @Singleton
 public class ApplicationController {
 	
@@ -67,9 +71,27 @@ public class ApplicationController {
 	public Result addBook(Book book){
 		EntityManager entityManager = entitiyManagerProvider.get();
 		List<Book> l=entityManager.createQuery("from Book where id="+ book.getId()).getResultList();
-		if(l.size()!=0)
-			return Results.badRequest();
+//		if(l.size()!=0)
+//			return Results.badRequest();
 		entityManager.persist(book);
 		return Results.json().render("success");
 	}
+	@Transactional
+	public Result delBook(Book book){
+		EntityManager entityManager = entitiyManagerProvider.get();
+		Book bo=entityManager.find(Book.class,book.getId());
+		entityManager.remove(bo);
+		return Results.json().render("success");
+	}
+	@Transactional
+	public Result updateBook(Book book){
+		EntityManager entityManager = entitiyManagerProvider.get();
+		Book bo=entityManager.find(Book.class,book.getId());
+		bo.setName(book.getName());
+		bo.setAuthor(book.getAuthor());
+		bo.setCategory(book.getCategory());
+		bo.setPrice(book.getPrice());
+		return Results.json().render("success");
+	}
+	
 }
